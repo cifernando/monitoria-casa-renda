@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { students } from "@/data/students";
 
 export default function Home() {
   return (
@@ -55,6 +56,38 @@ export default function Home() {
         </p>
 
       </main>
+
+      {/* Lista de Aprovados */}
+      <section className="w-full py-band px-6 flex flex-col items-center">
+
+        {/* Título */}
+        <h2 className="font-serif font-bold text-bordo text-3xl text-center mb-4">
+          Lista de Aprovados
+        </h2>
+
+        {/* Divider */}
+        <div className="dot-divider mb-8 justify-center">
+          <span className="bg-bordo" />
+          <span className="bg-turquesa" />
+          <span className="bg-laranja" />
+        </div>
+
+        {/* Alunos */}
+        <ul className="w-full max-w-lg">
+          {students.map((student) => (
+            <li key={student.phone} className="py-6 border-b border-bordo/10 last:border-b-0">
+              <p className="font-serif font-bold text-bordo text-xl mb-2">
+                {student.name}
+              </p>
+              <div className="border-b border-bordo/20 mb-3" />
+              <p className="font-sans text-text-muted text-sm leading-relaxed">
+                {student.feedback}
+              </p>
+            </li>
+          ))}
+        </ul>
+
+      </section>
 
       {/* Footer strip */}
       <footer className="w-full py-6 px-6 border-t border-bordo/10 text-center">
