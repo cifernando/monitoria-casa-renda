@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import html2canvas from "html2canvas-pro";
 
 interface StoryButtonProps {
@@ -10,17 +10,18 @@ interface StoryButtonProps {
 
 export function StoryButton({ studentName, feedback }: StoryButtonProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
+  const cachedFile = useRef<File | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateStory = useCallback(async () => {
+  const fileName = `monitoria-casa-renda-${studentName.toLowerCase().replace(/\s+/g, "-")}.png`;
+
+  // Pre-generate the story image on mount so sharing is instant on tap
+  useEffect(() => {
     const el = canvasRef.current;
-    if (!el || isGenerating) return;
+    if (!el) return;
 
-    setIsGenerating(true);
-
-    try {
+    const timer = setTimeout(async () => {
       el.style.display = "flex";
-
       const canvas = await html2canvas(el, {
         width: 1080,
         height: 1920,
@@ -28,15 +29,42 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
         useCORS: true,
         backgroundColor: null,
       });
-
       el.style.display = "none";
 
       const blob = await new Promise<Blob>((resolve) => {
         canvas.toBlob((b) => resolve(b!), "image/png");
       });
+      cachedFile.current = new File([blob], fileName, { type: "image/png" });
+    }, 500);
 
-      const fileName = `monitoria-casa-renda-${studentName.toLowerCase().replace(/\s+/g, "-")}.png`;
-      const file = new File([blob], fileName, { type: "image/png" });
+    return () => clearTimeout(timer);
+  }, [fileName]);
+
+  const shareStory = useCallback(async () => {
+    if (isGenerating) return;
+    setIsGenerating(true);
+
+    try {
+      // Generate if not pre-cached yet
+      if (!cachedFile.current) {
+        const el = canvasRef.current;
+        if (!el) return;
+        el.style.display = "flex";
+        const canvas = await html2canvas(el, {
+          width: 1080,
+          height: 1920,
+          scale: 1,
+          useCORS: true,
+          backgroundColor: null,
+        });
+        el.style.display = "none";
+        const blob = await new Promise<Blob>((resolve) => {
+          canvas.toBlob((b) => resolve(b!), "image/png");
+        });
+        cachedFile.current = new File([blob], fileName, { type: "image/png" });
+      }
+
+      const file = cachedFile.current;
 
       let shared = false;
       if (navigator.share) {
@@ -53,21 +81,21 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
       if (!shared) {
         const link = document.createElement("a");
         link.download = fileName;
-        link.href = URL.createObjectURL(blob);
+        link.href = URL.createObjectURL(file);
         link.click();
         URL.revokeObjectURL(link.href);
       }
     } finally {
       setIsGenerating(false);
     }
-  }, [studentName, isGenerating]);
+  }, [fileName, isGenerating]);
 
   const firstName = studentName.split(" ")[0];
 
   return (
     <>
       <button
-        onClick={generateStory}
+        onClick={shareStory}
         disabled={isGenerating}
         className="w-full bg-turquesa hover:bg-turquesa/90 text-white font-bold py-4 px-8 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] text-sm uppercase tracking-[0.15em] cursor-pointer disabled:opacity-60 disabled:cursor-wait"
       >

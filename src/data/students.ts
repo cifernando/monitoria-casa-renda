@@ -81,7 +81,7 @@ export const students: Student[] = [
     name: "Luiza Almeida",
     phone: "77981427436",
     feedback:
-      "Sua postura é bonita, com eixo bem posicionado. Segurança nas execuções, sensibilidade, escuta ativa e uma dança limpa — sem sobrar energia ou movimentos. Sua atenção ao tempo da música faz com que mesmo nos erros a dança continue fluindo lindamente.",
+      "Sua postura é bonita, com eixo bem posicionado. Segurança nas execuções, sensibilidade, escuta ativa e uma dança limpa — sem sobrar energia ou movimentos. Sua atenção ao tempo da música resulta num lindo improviso.",
   },
   {
     name: "Thomas Rolemberg",
@@ -93,7 +93,7 @@ export const students: Student[] = [
     name: "Luiza Reis",
     phone: "77981111841",
     feedback:
-      "Sua escuta é ativa, com entrega e sensibilidade. Leveza nas execuções, postura linda e comprometida com o próprio eixo. Uma dança de olhinho fechado — pura entrega e conexão.",
+      "Sua escuta é ativa, com entrega e sensibilidade. Leveza nas execuções, postura linda e comprometida com o próprio eixo. Sua musicalidade e fluidez fazem da sua dança pura entrega e conexão.",
   },
 ];
 
