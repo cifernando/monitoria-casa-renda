@@ -255,6 +255,23 @@ export function StoryButton({ studentName, feedback, photo, gender }: StoryButto
           Monitoria Casa Rendá 2026
         </div>
 
+        {/* Student photo */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={photo}
+          alt=""
+          width={280}
+          height={280}
+          style={{
+            borderRadius: "50%",
+            objectFit: "cover",
+            border: "4px solid #8B0020",
+            marginBottom: 40,
+            width: 280,
+            height: 280,
+          }}
+        />
+
         {/* Elegant divider with dot */}
         <div
           style={{
