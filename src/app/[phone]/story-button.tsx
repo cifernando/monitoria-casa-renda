@@ -204,7 +204,7 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
           alt=""
           width={100}
           height={125}
-          style={{ marginBottom: 50, objectFit: "contain" }}
+          style={{ marginBottom: 40, objectFit: "contain" }}
         />
 
         {/* Badge */}
@@ -218,7 +218,7 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
             fontWeight: 700,
             letterSpacing: "0.2em",
             textTransform: "uppercase" as const,
-            marginBottom: 50,
+            marginBottom: 40,
           }}
         >
           APROVADO(A)
@@ -245,7 +245,7 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
             fontSize: 30,
             color: "#6B5B50",
             textAlign: "center" as const,
-            marginBottom: 50,
+            marginBottom: 40,
             fontWeight: 300,
             letterSpacing: "0.05em",
           }}
@@ -259,7 +259,7 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
             display: "flex",
             alignItems: "center",
             gap: 20,
-            marginBottom: 50,
+            marginBottom: 40,
           }}
         >
           <div
@@ -279,28 +279,28 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
           />
         </div>
 
-        {/* Quote */}
+        {/* Feedback */}
         <div
           style={{
-            fontSize: 34,
+            fontSize: feedback.length > 200 ? 24 : 28,
             color: "#6B5B50",
             textAlign: "center" as const,
             fontStyle: "italic",
             lineHeight: 1.7,
-            maxWidth: 780,
+            maxWidth: 860,
             marginBottom: 24,
-            padding: "0 40px",
+            padding: "0 60px",
           }}
         >
-          &ldquo;A dança é feita de encontros, e que alegria ter encontrado você nesse caminho.&rdquo;
+          &ldquo;{feedback}&rdquo;
         </div>
 
         <div
           style={{
             fontFamily: "Playfair Display, serif",
-            fontSize: 26,
+            fontSize: 24,
             color: "#8B0020",
-            marginBottom: 80,
+            marginBottom: 60,
           }}
         >
           — Clara Guimarães
