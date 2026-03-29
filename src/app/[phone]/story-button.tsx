@@ -38,11 +38,19 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
       const fileName = `monitoria-casa-renda-${studentName.toLowerCase().replace(/\s+/g, "-")}.png`;
       const file = new File([blob], fileName, { type: "image/png" });
 
-      if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-        });
-      } else {
+      let shared = false;
+      if (navigator.share) {
+        try {
+          await navigator.share({ files: [file] });
+          shared = true;
+        } catch (err) {
+          if ((err as DOMException).name === "AbortError") {
+            shared = true;
+          }
+        }
+      }
+
+      if (!shared) {
         const link = document.createElement("a");
         link.download = fileName;
         link.href = URL.createObjectURL(blob);

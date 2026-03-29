@@ -138,6 +138,9 @@ export default async function StudentPage({ params }: Props) {
             Compartilhe sua conquista!
           </p>
           <StoryButton studentName={student.name} feedback={student.feedback} />
+          <p className="text-text-muted text-xs font-sans opacity-70">
+            Selecione &ldquo;Instagram Stories&rdquo; na tela de compartilhamento
+          </p>
         </section>
 
       </main>
