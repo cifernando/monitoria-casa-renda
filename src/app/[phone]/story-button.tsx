@@ -6,9 +6,11 @@ import html2canvas from "html2canvas-pro";
 interface StoryButtonProps {
   studentName: string;
   feedback: string;
+  photo: string;
+  gender: "m" | "f";
 }
 
-export function StoryButton({ studentName, feedback }: StoryButtonProps) {
+export function StoryButton({ studentName, feedback, photo, gender }: StoryButtonProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const cachedFile = useRef<File | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -221,7 +223,7 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
             marginBottom: 40,
           }}
         >
-          APROVADO(A)
+          {gender === "m" ? "APROVADO" : "APROVADA"}
         </div>
 
         {/* Name */}

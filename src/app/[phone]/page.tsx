@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!student) return { title: "Não encontrado" };
   return {
     title: `Parabéns, ${student.name}! — Monitoria Casa Rendá`,
-    description: `${student.name} foi aprovado(a) na Monitoria Casa Rendá com Clara Guimarães.`,
+    description: `${student.name} foi ${student.gender === "m" ? "aprovado" : "aprovada"} na Monitoria Casa Rendá com Clara Guimarães.`,
   };
 }
 
@@ -59,10 +59,23 @@ export default async function StudentPage({ params }: Props) {
             />
           </div>
 
+          {/* Student photo */}
+          <div className="mb-6">
+            <Image
+              src={student.photo}
+              alt={student.name}
+              width={120}
+              height={120}
+              priority
+              unoptimized
+              className="rounded-full object-cover ring-2 ring-bordo/20"
+            />
+          </div>
+
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-bordo text-cream text-xs font-bold tracking-[0.2em] uppercase px-4 py-2 rounded-full mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-laranja" />
-            Aprovado(a)
+            {student.gender === "m" ? "Aprovado" : "Aprovada"}
           </div>
 
           {/* Main heading */}
@@ -81,7 +94,7 @@ export default async function StudentPage({ params }: Props) {
           </div>
 
           <p className="text-text-muted text-lg font-light max-w-xs leading-relaxed">
-            Você foi selecionado(a) para a{" "}
+            {student.gender === "m" ? "Você foi selecionado" : "Você foi selecionada"} para a{" "}
             <span className="text-bordo font-semibold">Monitoria Casa Rendá 2026</span>.
           </p>
         </section>
@@ -137,7 +150,12 @@ export default async function StudentPage({ params }: Props) {
           <p className="text-text-muted text-sm font-sans">
             Compartilhe sua conquista!
           </p>
-          <StoryButton studentName={student.name} feedback={student.feedback} />
+          <StoryButton
+            studentName={student.name}
+            feedback={student.feedback}
+            photo={student.photo}
+            gender={student.gender}
+          />
           <p className="text-text-muted text-xs font-sans opacity-70">
             Selecione &ldquo;Instagram Stories&rdquo; na tela de compartilhamento
           </p>
