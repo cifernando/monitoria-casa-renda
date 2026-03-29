@@ -204,8 +204,8 @@ export function StoryButton({ studentName, feedback, photo, gender }: StoryButto
         <img
           src="/logo-casa-renda.png"
           alt=""
-          width={100}
-          height={125}
+          width={140}
+          height={175}
           style={{ marginBottom: 40, objectFit: "contain" }}
         />
 
@@ -214,9 +214,9 @@ export function StoryButton({ studentName, feedback, photo, gender }: StoryButto
           style={{
             background: "#8B0020",
             color: "#FFF8F0",
-            padding: "18px 56px",
+            padding: "24px 72px",
             borderRadius: 50,
-            fontSize: 26,
+            fontSize: 48,
             fontWeight: 700,
             letterSpacing: "0.2em",
             textTransform: "uppercase" as const,
@@ -230,7 +230,7 @@ export function StoryButton({ studentName, feedback, photo, gender }: StoryButto
         <div
           style={{
             fontFamily: "Playfair Display, serif",
-            fontSize: 90,
+            fontSize: 120,
             fontWeight: 700,
             color: "#8B0020",
             textAlign: "center" as const,
@@ -244,7 +244,7 @@ export function StoryButton({ studentName, feedback, photo, gender }: StoryButto
         {/* Subtitle */}
         <div
           style={{
-            fontSize: 30,
+            fontSize: 52,
             color: "#6B5B50",
             textAlign: "center" as const,
             marginBottom: 40,
@@ -301,7 +301,7 @@ export function StoryButton({ studentName, feedback, photo, gender }: StoryButto
         {/* Feedback */}
         <div
           style={{
-            fontSize: feedback.length > 200 ? 24 : 28,
+            fontSize: feedback.length > 200 ? 38 : 46,
             color: "#6B5B50",
             textAlign: "center" as const,
             fontStyle: "italic",
@@ -317,7 +317,7 @@ export function StoryButton({ studentName, feedback, photo, gender }: StoryButto
         <div
           style={{
             fontFamily: "Playfair Display, serif",
-            fontSize: 24,
+            fontSize: 44,
             color: "#8B0020",
             marginBottom: 60,
           }}
@@ -337,7 +337,7 @@ export function StoryButton({ studentName, feedback, photo, gender }: StoryButto
           <div
             style={{
               fontFamily: "Playfair Display, serif",
-              fontSize: 28,
+              fontSize: 48,
               color: "#8B0020",
               fontWeight: 700,
               letterSpacing: "0.1em",
@@ -345,7 +345,7 @@ export function StoryButton({ studentName, feedback, photo, gender }: StoryButto
           >
             Casa Rendá
           </div>
-          <div style={{ fontSize: 18, color: "#6B5B50", letterSpacing: "0.15em" }}>
+          <div style={{ fontSize: 34, color: "#6B5B50", letterSpacing: "0.15em" }}>
             Arte que Entrelaça
           </div>
         </div>
