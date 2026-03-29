@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useState } from "react";
 import html2canvas from "html2canvas-pro";
 
 interface StoryButtonProps {
@@ -10,28 +10,49 @@ interface StoryButtonProps {
 
 export function StoryButton({ studentName, feedback }: StoryButtonProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const generateStory = useCallback(async () => {
     const el = canvasRef.current;
-    if (!el) return;
+    if (!el || isGenerating) return;
 
-    el.style.display = "flex";
+    setIsGenerating(true);
 
-    const canvas = await html2canvas(el, {
-      width: 1080,
-      height: 1920,
-      scale: 1,
-      useCORS: true,
-      backgroundColor: null,
-    });
+    try {
+      el.style.display = "flex";
 
-    el.style.display = "none";
+      const canvas = await html2canvas(el, {
+        width: 1080,
+        height: 1920,
+        scale: 1,
+        useCORS: true,
+        backgroundColor: null,
+      });
 
-    const link = document.createElement("a");
-    link.download = `monitoria-casa-renda-${studentName.toLowerCase().replace(/\s+/g, "-")}.png`;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  }, [studentName]);
+      el.style.display = "none";
+
+      const blob = await new Promise<Blob>((resolve) => {
+        canvas.toBlob((b) => resolve(b!), "image/png");
+      });
+
+      const fileName = `monitoria-casa-renda-${studentName.toLowerCase().replace(/\s+/g, "-")}.png`;
+      const file = new File([blob], fileName, { type: "image/png" });
+
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+        });
+      } else {
+        const link = document.createElement("a");
+        link.download = fileName;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        URL.revokeObjectURL(link.href);
+      }
+    } finally {
+      setIsGenerating(false);
+    }
+  }, [studentName, isGenerating]);
 
   const firstName = studentName.split(" ")[0];
 
@@ -39,9 +60,10 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
     <>
       <button
         onClick={generateStory}
-        className="w-full bg-turquesa hover:bg-turquesa/90 text-white font-bold py-4 px-8 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] text-sm uppercase tracking-[0.15em] cursor-pointer"
+        disabled={isGenerating}
+        className="w-full bg-turquesa hover:bg-turquesa/90 text-white font-bold py-4 px-8 rounded-full transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] text-sm uppercase tracking-[0.15em] cursor-pointer disabled:opacity-60 disabled:cursor-wait"
       >
-        Compartilhar no Stories
+        {isGenerating ? "Gerando..." : "Compartilhar no Stories"}
       </button>
 
       {/* Hidden story art — rendered offscreen for html2canvas */}
@@ -54,37 +76,111 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(180deg, #FFF8F0 0%, #F5EDE3 40%, #FFF8F0 100%)",
-          padding: 80,
+          background: "linear-gradient(170deg, #FFF8F0 0%, #F5EDE3 35%, #FFF8F0 65%, #F5EDE3 100%)",
           position: "fixed",
           top: -9999,
           left: -9999,
           fontFamily: "Lato, sans-serif",
+          overflow: "hidden",
         }}
       >
-        {/* Top decorative dots */}
+        {/* Top decorative border */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 8,
+            background: "linear-gradient(90deg, #2A9D8F, #8B0020, #E76F51)",
+          }}
+        />
+
+        {/* Subtle corner accents — top left */}
+        <div
+          style={{
+            position: "absolute",
+            top: 40,
+            left: 40,
+            width: 80,
+            height: 80,
+            borderTop: "2px solid rgba(139, 0, 32, 0.15)",
+            borderLeft: "2px solid rgba(139, 0, 32, 0.15)",
+          }}
+        />
+
+        {/* Subtle corner accents — top right */}
+        <div
+          style={{
+            position: "absolute",
+            top: 40,
+            right: 40,
+            width: 80,
+            height: 80,
+            borderTop: "2px solid rgba(139, 0, 32, 0.15)",
+            borderRight: "2px solid rgba(139, 0, 32, 0.15)",
+          }}
+        />
+
+        {/* Subtle corner accents — bottom left */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 40,
+            left: 40,
+            width: 80,
+            height: 80,
+            borderBottom: "2px solid rgba(139, 0, 32, 0.15)",
+            borderLeft: "2px solid rgba(139, 0, 32, 0.15)",
+          }}
+        />
+
+        {/* Subtle corner accents — bottom right */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 40,
+            right: 40,
+            width: 80,
+            height: 80,
+            borderBottom: "2px solid rgba(139, 0, 32, 0.15)",
+            borderRight: "2px solid rgba(139, 0, 32, 0.15)",
+          }}
+        />
+
+        {/* Decorative dots — top */}
         <div
           style={{
             display: "flex",
-            gap: 16,
-            marginBottom: 60,
+            gap: 20,
+            marginBottom: 50,
           }}
         >
-          <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#2A9D8F" }} />
-          <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#8B0020" }} />
-          <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#E76F51" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#2A9D8F" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#8B0020" }} />
+          <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#E76F51" }} />
         </div>
+
+        {/* Logo */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logo-casa-renda.png"
+          alt=""
+          width={100}
+          height={125}
+          style={{ marginBottom: 50, objectFit: "contain" }}
+        />
 
         {/* Badge */}
         <div
           style={{
             background: "#8B0020",
             color: "#FFF8F0",
-            padding: "16px 48px",
+            padding: "18px 56px",
             borderRadius: 50,
-            fontSize: 28,
+            fontSize: 26,
             fontWeight: 700,
-            letterSpacing: "0.15em",
+            letterSpacing: "0.2em",
             textTransform: "uppercase" as const,
             marginBottom: 50,
           }}
@@ -96,12 +192,12 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
         <div
           style={{
             fontFamily: "Playfair Display, serif",
-            fontSize: 80,
+            fontSize: 90,
             fontWeight: 700,
             color: "#8B0020",
             textAlign: "center" as const,
-            lineHeight: 1.2,
-            marginBottom: 20,
+            lineHeight: 1.15,
+            marginBottom: 16,
           }}
         >
           {firstName}
@@ -110,25 +206,42 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
         {/* Subtitle */}
         <div
           style={{
-            fontSize: 32,
+            fontSize: 30,
             color: "#6B5B50",
             textAlign: "center" as const,
-            marginBottom: 60,
+            marginBottom: 50,
             fontWeight: 300,
+            letterSpacing: "0.05em",
           }}
         >
           Monitoria Casa Rendá 2026
         </div>
 
-        {/* Divider */}
+        {/* Elegant divider with dot */}
         <div
           style={{
-            width: 160,
-            height: 2,
-            background: "linear-gradient(90deg, transparent, #8B0020, transparent)",
-            marginBottom: 60,
+            display: "flex",
+            alignItems: "center",
+            gap: 20,
+            marginBottom: 50,
           }}
-        />
+        >
+          <div
+            style={{
+              width: 80,
+              height: 1,
+              background: "linear-gradient(90deg, transparent, #8B0020)",
+            }}
+          />
+          <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#E76F51" }} />
+          <div
+            style={{
+              width: 80,
+              height: 1,
+              background: "linear-gradient(90deg, #8B0020, transparent)",
+            }}
+          />
+        </div>
 
         {/* Quote */}
         <div
@@ -137,9 +250,10 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
             color: "#6B5B50",
             textAlign: "center" as const,
             fontStyle: "italic",
-            lineHeight: 1.6,
-            maxWidth: 800,
-            marginBottom: 20,
+            lineHeight: 1.7,
+            maxWidth: 780,
+            marginBottom: 24,
+            padding: "0 40px",
           }}
         >
           &ldquo;A dança é feita de encontros, e que alegria ter encontrado você nesse caminho.&rdquo;
@@ -148,7 +262,7 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
         <div
           style={{
             fontFamily: "Playfair Display, serif",
-            fontSize: 28,
+            fontSize: 26,
             color: "#8B0020",
             marginBottom: 80,
           }}
@@ -162,16 +276,36 @@ export function StoryButton({ studentName, feedback }: StoryButtonProps) {
             display: "flex",
             flexDirection: "column" as const,
             alignItems: "center",
-            gap: 12,
+            gap: 8,
           }}
         >
-          <div style={{ fontSize: 24, color: "#8B0020", fontWeight: 700 }}>
+          <div
+            style={{
+              fontFamily: "Playfair Display, serif",
+              fontSize: 28,
+              color: "#8B0020",
+              fontWeight: 700,
+              letterSpacing: "0.1em",
+            }}
+          >
             Casa Rendá
           </div>
-          <div style={{ fontSize: 18, color: "#6B5B50" }}>
+          <div style={{ fontSize: 18, color: "#6B5B50", letterSpacing: "0.15em" }}>
             Arte que Entrelaça
           </div>
         </div>
+
+        {/* Bottom decorative border */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: 8,
+            background: "linear-gradient(90deg, #E76F51, #8B0020, #2A9D8F)",
+          }}
+        />
       </div>
     </>
   );
