@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bordo: #8B0020;
+  --bordo-dark: #6B0018;
+  --turquesa: #2A9D8F;
+  --laranja: #E76F51;
+  --cream: #FFF8F0;
+  --cream-dark: #F5EDE3;
+  --text-dark: #2D1810;
+  --text-muted: #6B5B50;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-bordo: var(--bordo);
+  --color-bordo-dark: var(--bordo-dark);
+  --color-turquesa: var(--turquesa);
+  --color-laranja: var(--laranja);
+  --color-cream: var(--cream);
+  --color-cream-dark: var(--cream-dark);
+  --color-text-dark: var(--text-dark);
+  --color-text-muted: var(--text-muted);
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-lato);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
+  font-family: var(--font-lato), sans-serif;
+}
+
+/* Lace texture pattern as decorative element */
+.lace-pattern {
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(139, 0, 32, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(42, 157, 143, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(139, 0, 32, 0.02) 0%, transparent 50%);
+}
+
+/* Decorative lace border */
+.lace-border {
+  position: relative;
+}
+
+.lace-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--bordo), transparent);
+}
+
+.lace-border::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--bordo), transparent);
+}
+
+/* Band spacing system (inspired by Duyvenvoorde) */
+.py-band {
+  padding-top: clamp(64px, 8vw, 112px);
+  padding-bottom: clamp(64px, 8vw, 112px);
+}
+
+.pt-band {
+  padding-top: clamp(64px, 8vw, 112px);
+}
+
+.pb-band {
+  padding-bottom: clamp(64px, 8vw, 112px);
+}
+
+/* Section divider dots */
+.dot-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot-divider span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
 }
